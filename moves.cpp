@@ -6,7 +6,34 @@ uint64_t rajaMoves(uint64_t click,uint64_t* board){}
 //Mantri can move one square diagonally
 uint64_t mantriMoves(uint64_t click,uint64_t* board){}
 //Normal Rook
-uint64_t ashvaMoves(uint64_t click,uint64_t* board){}
+uint64_t ashvaMoves(uint64_t click, uint64_t you) {
+    // Knight move pattern (L-shape) as a 128-bit integer
+    __uint128_t knight_pattern = __uint128_t(0b0101000010001000000000001000100001010000000000000000000000000000)<<64;
+
+    // Shift the pattern based on the knight's current position (click)
+    uint8_t shift = bitBoardToInt(click);  // Convert click to square index (0-63)
+    std::cout << "Knight position index: " << (int)shift << std::endl;
+
+    if (shift >= 0 && shift < 64) {
+        knight_pattern >>= shift;  // Shift pattern to align with the knight's current position
+    } else {
+        knight_pattern = 0;  // Prevent overflow if the shift is invalid
+    }
+
+    // Bound the moves to the board and remove invalid ones
+    uint64_t knight_moves = boardBoundCheck(knight_pattern);  // Check for out-of-bound moves
+    knight_moves &= ~you;  // Remove friendly pieces (no attacking your own pieces)
+
+    // Apply mask to ensure valid knight moves
+    knight_moves = mask(knight_moves, click);
+
+    // Debugging output
+    std::cout << "Knight Moves: " << std::hex << knight_moves << std::endl;
+
+    return knight_moves;
+}
+
+
 //2 Squares diagonally
 uint64_t gajaMoves(uint64_t click,uint64_t* board){}
 //1 Square forward

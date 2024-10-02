@@ -63,7 +63,12 @@ void chessBoard::drawBoard() {
                     uint8_t row = mousePos.y / SQUARE_SIZE;
                     if (validCLick({col, row}, this->board)) {
                         (this->board)[2] = handleClick({col, row}, this->board);
-                    } else {
+                    (this->board)[16] = intToBitboard(col+row*8);}
+                    else if(intToBitboard(col+row*8)&this->board[2]){
+                        this->board = playMove(intToBitboard(col+row*8),board);
+                        this->board[2]=0;
+                    }
+                    else {
                         (this->board)[2] = 0;
                     }
                 }

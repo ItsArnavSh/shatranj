@@ -11,10 +11,10 @@
 // 8,14: Black and White Pawns
 
 uint64_t* getBoard() {
-    uint64_t* board = new uint64_t[16];
+    uint64_t* board = new uint64_t[17];
 
     // Initialize all bitboards to 0
-    for (int i = 0; i < 16; ++i) {
+    for (int i = 0; i < 17; ++i) {
         board[i] = 0;
     }
 
