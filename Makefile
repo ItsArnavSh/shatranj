@@ -2,29 +2,33 @@
 CXX = g++
 CXXFLAGS = -Wall -g -std=c++17
 
-# Source files and object files
-SOURCES = main.cpp util.cpp maingraphics.cpp eventhandler.cpp moves.cpp moveshelper.cpp board.cpp engine.cpp
-OBJECTS = $(SOURCES:.cpp=.o)
+# SFML libraries
+SFML_LIBS = -lsfml-graphics -lsfml-window -lsfml-system
 
 # Target executable
 TARGET = main_program
 
-# Build the executable
+# Source files
+SRCS = main.cpp util.cpp maingraphics.cpp eventhandler.cpp moves.cpp moveshelper.cpp board.cpp engine.cpp
+
+# Object files (replace .cpp with .o)
+OBJS = $(SRCS:.cpp=.o)
+
+# Default target
 all: $(TARGET)
 
-$(TARGET): $(OBJECTS)
-	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJECTS)
+# Link object files to create the executable
+$(TARGET): $(OBJS)
+	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJS) $(SFML_LIBS)
 
-# Compile the .cpp files into .o object files
-%.o: %.cpp %.h
+# Compile source files into object files
+%.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+# Clean the build
+clean:
+	rm -f $(OBJS) $(TARGET)
 
 # Run the program
 run: $(TARGET)
 	./$(TARGET)
-
-
-
-# Clean object files and executable
-clean:
-	rm -f $(OBJECTS) $(TARGET)

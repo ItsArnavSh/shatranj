@@ -3,6 +3,7 @@
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <vector>
+#include <iostream>
 
 // Constructor for chessBoard class
 chessBoard::chessBoard(uint64_t* bitboard)
@@ -33,7 +34,6 @@ bool chessBoard::loadTexture(const std::string &filename, sf::Texture &texture) 
     }
     return true;
 }
-
 // Function to draw the chessboard
 void chessBoard::drawBoard() {
     // Colors for the board squares
@@ -46,6 +46,21 @@ void chessBoard::drawBoard() {
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed)
                 window.close();
+
+            // Handle mouse click event
+            if (event.type == sf::Event::MouseButtonPressed) {
+                if (event.mouseButton.button == sf::Mouse::Left) {
+                    // Get mouse position relative to the window
+                    sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+
+                    // Convert mouse position to board coordinates
+                    int col = mousePos.x / SQUARE_SIZE;
+                    int row = mousePos.y / SQUARE_SIZE;
+
+                    // Print the board coordinates to console
+                    std::cout << "Mouse clicked at board position: (" << col << ", " << row << ")" << std::endl;
+                }
+            }
         }
 
         // Clear the window
@@ -68,14 +83,13 @@ void chessBoard::drawBoard() {
                 window.draw(square);
             }
         }
-/*
-        for(int i=3;i<15;i++)
-        {
-            std::vector<int> num = bitboardToVector(board[i]);
 
-            //drawPiece({1,1}, i-3);
+        for (int i = 3; i < 15; i++) {
+            std::vector<uint8_t> num = bitboardToVector(board[i]);
+            for (auto j : num)
+                drawPiece({uint8_t(j % 8), uint8_t(j / 8)}, i - 3);
         }
-*/
+
         // Display the window contents
         window.display();
     }

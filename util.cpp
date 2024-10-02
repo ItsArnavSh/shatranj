@@ -1,13 +1,13 @@
 #include "util.h"
 
-uint64_t intToBitboard(int num) {
+uint64_t intToBitboard(uint8_t num) {
     if (num < 0 || num > 63) {
         return 0;  // Invalid position, return 0
     }
     return 1ULL << num;  // Shift a 1 to the left by `num` positions
 }
 
-int bitBoardToInt(uint64_t bitboard) {
+uint8_t bitBoardToInt(uint64_t bitboard) {
     if (bitboard == 0) {
         return -1;  // No valid bit set
     }
@@ -21,8 +21,8 @@ int bitBoardToInt(uint64_t bitboard) {
     return pos;
 }
 
-std::vector<int> bitboardToVector(uint64_t bitboard) {
-    std::vector<int> positions;
+std::vector<uint8_t> bitboardToVector(uint64_t bitboard) {
+    std::vector<uint8_t> positions;
 
     for (int i = 0; i < 64; ++i) {
         if (bitboard & (1ULL << i)) {  // Check if the i-th bit is set
