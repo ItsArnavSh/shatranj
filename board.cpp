@@ -11,10 +11,10 @@
 // 8,14: Black and White Pawns
 
 uint64_t* getBoard() {
-    uint64_t* board = new uint64_t[15];
+    uint64_t* board = new uint64_t[16];
 
     // Initialize all bitboards to 0
-    for (int i = 0; i < 15; ++i) {
+    for (int i = 0; i < 16; ++i) {
         board[i] = 0;
     }
 
@@ -48,6 +48,8 @@ uint64_t* getBoard() {
     board[8] = 0x00FF000000000000;  // Black pawns start on rank 7
     board[14] = 0x000000000000FF00;  // White pawns start on rank 2
 
+    //turn
+    board[15] = 1;
     // Moves bitboard (dynamic, initially 0)
     board[2] = 0x0;  // This will be populated dynamically when calculating available moves
 

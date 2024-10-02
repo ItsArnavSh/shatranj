@@ -1,11 +1,14 @@
 #ifndef CHESSBOARD_H
 #define CHESSBOARD_H
 
+#ifndef EVENTHANDLER_H
+#define EVENTHANDLER_H
+
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <string>
 
-// Chessboard dimensions
+/// Chessboard dimensions
 const int BOARD_SIZE = 8;
 const int SQUARE_SIZE = 100;
 
@@ -39,3 +42,4 @@ private:
 };
 
 #endif // CHESSBOARD_H
+#endif

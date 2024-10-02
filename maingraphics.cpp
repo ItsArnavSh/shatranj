@@ -1,9 +1,11 @@
 #include "maingraphics.h"
+#include "eventhandler.h"
 #include "util.h"
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <vector>
 #include <iostream>
+
 
 // Constructor for chessBoard class
 chessBoard::chessBoard(uint64_t* bitboard)
@@ -54,11 +56,17 @@ void chessBoard::drawBoard() {
                     sf::Vector2i mousePos = sf::Mouse::getPosition(window);
 
                     // Convert mouse position to board coordinates
-                    int col = mousePos.x / SQUARE_SIZE;
-                    int row = mousePos.y / SQUARE_SIZE;
-
+                    uint8_t col = mousePos.x / SQUARE_SIZE;
+                    uint8_t row = mousePos.y / SQUARE_SIZE;
+                    if(validCLick({col,row}, this->board))
+                    {
+                        (this->board)[2] = handleClick({col,row}, this->board);
+                    }
+                    else {
+                        (this->board)[2] = 0;
+                    }
                     // Print the board coordinates to console
-                    std::cout << "Mouse clicked at board position: (" << col << ", " << row << ")" << std::endl;
+                    //std::cout << "Mouse clicked at board position: (" << col << ", " << row << ")" << std::endl;
                 }
             }
         }

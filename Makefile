@@ -32,3 +32,8 @@ clean:
 # Run the program
 run: $(TARGET)
 	./$(TARGET)
+# check status
+status:
+	@echo Currently `ls *.h *.cpp 2>/dev/null | wc -l` files in the project;
+	@echo There are `cat *.h *.cpp 2>/dev/null | wc -l` lines completed;
+	@echo `expr 1000 - \`cat *.h *.cpp 2>/dev/null | wc -l\`` lines remaining to reach 1000;
