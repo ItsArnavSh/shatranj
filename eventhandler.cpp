@@ -24,6 +24,18 @@ uint64_t handleClick(coord coordinate, uint64_t* board){
     else if(click&board[6]){
         return ashvaMoves(click, board[0]);
     }
+    else if(click&board[3]){
+        return rajaMoves(click, board[0]);
+    }
+    else if(click&board[4]){
+        return mantriMoves(click, board[0]);
+    }
+    else if(click&board[5]){
+        return rathaMoves(click, board[0],board[1]);
+    }
+    else if(click&board[7]){
+        return gajaMoves(click, board[0]);
+    }
     return 0;
 }
 uint64_t* playMove(uint64_t click,uint64_t* board){
