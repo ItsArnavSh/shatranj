@@ -2,6 +2,9 @@
 #include "util.h"
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Graphics/Color.hpp>
+#include <cstdint>
+#include <sys/types.h>
+#include <iostream>
 bool validCLick(coord coordinates,uint64_t* board){
     uint8_t location = coordinates.x+coordinates.y*8;
     //We will tell if the click is valid or not
@@ -12,7 +15,11 @@ bool validCLick(coord coordinates,uint64_t* board){
 }
 
 uint64_t handleClick(coord coordinate, uint64_t* board){
+
     uint8_t location = coordinate.x+coordinate.y*8;
     //Now we need to see which case was clicked and send it to the appropriate function
-
+    uint64_t click = intToBitboard(location);
+    if(click&board[8]){
+        return padatiMoves(click, board[0], board[1], 0);}
+    return 0;
 }

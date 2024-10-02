@@ -1,6 +1,7 @@
 #include "maingraphics.h"
 #include "eventhandler.h"
 #include "util.h"
+#include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <vector>
@@ -37,10 +38,12 @@ bool chessBoard::loadTexture(const std::string &filename, sf::Texture &texture) 
     return true;
 }
 // Function to draw the chessboard
+// Function to draw the chessboard
 void chessBoard::drawBoard() {
     // Colors for the board squares
     sf::Color lightSquareColor(240, 217, 181);  // Light squares (like beige)
     sf::Color darkSquareColor(181, 136, 99);    // Dark squares (like brown)
+    sf::Color moveCircleColor(50, 205, 50, 150); // Semi-transparent green for move indication
 
     // Main game loop
     while (window.isOpen()) {
@@ -58,15 +61,11 @@ void chessBoard::drawBoard() {
                     // Convert mouse position to board coordinates
                     uint8_t col = mousePos.x / SQUARE_SIZE;
                     uint8_t row = mousePos.y / SQUARE_SIZE;
-                    if(validCLick({col,row}, this->board))
-                    {
-                        (this->board)[2] = handleClick({col,row}, this->board);
-                    }
-                    else {
+                    if (validCLick({col, row}, this->board)) {
+                        (this->board)[2] = handleClick({col, row}, this->board);
+                    } else {
                         (this->board)[2] = 0;
                     }
-                    // Print the board coordinates to console
-                    //std::cout << "Mouse clicked at board position: (" << col << ", " << row << ")" << std::endl;
                 }
             }
         }
@@ -92,10 +91,26 @@ void chessBoard::drawBoard() {
             }
         }
 
+        // Draw the pieces
         for (int i = 3; i < 15; i++) {
             std::vector<uint8_t> num = bitboardToVector(board[i]);
             for (auto j : num)
                 drawPiece({uint8_t(j % 8), uint8_t(j / 8)}, i - 3);
+        }
+
+        // Plotting all the moves in this->board[2]
+        if (this->board[2] != 0) {
+            std::vector<uint8_t> moves = bitboardToVector(this->board[2]);
+            for (auto move : moves) {
+                uint8_t col = move % 8;
+                uint8_t row = move / 8;
+
+                // Draw a semi-transparent circle on the possible move square
+                sf::CircleShape moveCircle(SQUARE_SIZE / 4);  // Radius is half the size of the square
+                moveCircle.setFillColor(moveCircleColor);
+                moveCircle.setPosition(col * SQUARE_SIZE + SQUARE_SIZE / 4, row * SQUARE_SIZE + SQUARE_SIZE / 4);
+                window.draw(moveCircle);
+            }
         }
 
         // Display the window contents
