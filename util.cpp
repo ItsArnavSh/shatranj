@@ -32,3 +32,14 @@ std::vector<uint8_t> bitboardToVector(uint64_t bitboard) {
 
     return positions;
 }
+
+uint8_t oneNumber(uint64_t bitboard){
+    //Returns the number of bits
+    uint8_t count;
+    while(bitboard){
+        if(bitboard&0b1)
+            count++;
+        bitboard >>= 1;
+    }
+    return count;
+}
