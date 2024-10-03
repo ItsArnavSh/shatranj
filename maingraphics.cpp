@@ -5,7 +5,6 @@
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <vector>
-#include <iostream>
 
 
 // Constructor for chessBoard class
@@ -15,18 +14,18 @@ chessBoard::chessBoard(uint64_t* bitboard)
     this->board = bitboard;
     // Load all chess piece textures
     textures.resize(12);  // Assuming 12 pieces (6 for each side)
-    loadTexture("pieces/raja-b.png", textures[0]);
-    loadTexture("pieces/mantri-b.png", textures[1]);
-    loadTexture("pieces/ratha-b.png", textures[2]);
-    loadTexture("pieces/gaja-b.png", textures[3]);
-    loadTexture("pieces/ashva-b.png", textures[4]);
-    loadTexture("pieces/padati-b.png", textures[5]);
-    loadTexture("pieces/raja-w.png", textures[6]);
-    loadTexture("pieces/mantri-w.png", textures[7]);
-    loadTexture("pieces/ratha-w.png", textures[8]);
-    loadTexture("pieces/gaja-w.png", textures[9]);
-    loadTexture("pieces/ashva-w.png", textures[10]);
-    loadTexture("pieces/padati-w.png", textures[11]);
+    loadTexture("pieces/raja-w.png", textures[0]);
+    loadTexture("pieces/mantri-w.png", textures[1]);
+    loadTexture("pieces/ratha-w.png", textures[2]);
+    loadTexture("pieces/ashva-w.png", textures[3]);
+    loadTexture("pieces/gaja-w.png", textures[4]);
+    loadTexture("pieces/padati-w.png", textures[5]);
+    loadTexture("pieces/raja-b.png", textures[6]);
+    loadTexture("pieces/mantri-b.png", textures[7]);
+    loadTexture("pieces/ratha-b.png", textures[8]);
+    loadTexture("pieces/ashva-b.png", textures[9]);
+    loadTexture("pieces/gaja-b.png", textures[10]);
+    loadTexture("pieces/padati-b.png", textures[11]);
 }
 
 // Function to load textures by reference
