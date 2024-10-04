@@ -1,15 +1,12 @@
-#pragma once
-#ifndef CHESSBOARD_H
-#define CHESSBOARD_H
+#ifndef MAINGRAPHICS_H
+#define MAINGRAPHICS_H
 
-#ifndef EVENTHANDLER_H
-#define EVENTHANDLER_H
-#include "debugger.h"
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <string>
-#include "board.h"
 
+#include "debugger.h"
+#include "board.h"
 
 /// Chessboard dimensions
 const int BOARD_SIZE = 8;
@@ -45,4 +42,3 @@ private:
 };
 
 #endif // CHESSBOARD_H
-#endif
