@@ -26,7 +26,7 @@ int8_t minimax(uint64_t* position,uint8_t depth,bool turn)
     {
         return evaluate(position);
     }
-        if(turn)
+        if(!turn)
         {
             uint8_t maxEval = -100;
             vector<uint64_t*> eachCase = allMoves(position,turn);
@@ -64,3 +64,56 @@ uint64_t* carlsen(uint64_t* board){
     }
     return allM[bestMoveIndex];
 }
+    int8_t alphaBeta(uint64_t* position, uint8_t depth, bool turn, int8_t alpha, int8_t beta) {
+        if (depth == 0) {
+            return evaluate(position); // Assuming evaluate() returns an evaluation score
+        }
+
+        vector<uint64_t*> possibleMoves = allMoves(position, turn); // Get all moves for the current turn
+
+        if (!turn) { // Maximizing player (Black)
+            int8_t maxEval = -1000; // Use a wider range based on evaluate()'s expected return values
+            for (auto& move : possibleMoves) {
+                int8_t eval = alphaBeta(move, depth - 1, !turn, alpha, beta);
+                maxEval = std::max(maxEval, eval);
+                alpha = std::max(alpha, eval);
+                if (beta <= alpha) {
+                    break; // Beta cut-off
+                }
+            }
+            return maxEval;
+        } else { // Minimizing player (White)
+            int8_t minEval = 1000; // Use a wider range based on evaluate()'s expected return values
+            for (auto& move : possibleMoves) {
+                int8_t eval = alphaBeta(move, depth - 1, !turn, alpha, beta);
+                minEval = std::min(minEval, eval);
+                beta = std::min(beta, eval);
+                if (beta <= alpha) {
+                    break; // Alpha cut-off
+                }
+            }
+            return minEval;
+        }
+    }
+
+    uint64_t* levy(uint64_t* board) {
+        // Get all possible moves for the current board state
+        vector<uint64_t*> allM = allMoves(board, true); // Assuming true is the current turn
+        if (allM.empty()) return nullptr; // Safety check if no moves are available
+
+        uint64_t* bestMove = allM[0]; // Default to the first move to ensure a move is always selected
+        int8_t alpha = -1000; // Use a wider range based on evaluate()'s expected return values
+        int8_t beta = 1000;
+        int8_t bestEval = -1000;
+
+        // Evaluate each possible move using alpha-beta pruning
+        for (uint8_t i = 0; i < allM.size(); ++i) {
+            int8_t eval = alphaBeta(allM[i], 4, false, alpha, beta); // Increase depth if necessary
+            if (eval > bestEval) {
+                bestEval = eval;
+                bestMove = allM[i]; // Select the best move
+            }
+        }
+
+        return bestMove;
+    }

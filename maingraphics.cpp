@@ -1,4 +1,5 @@
 #include "maingraphics.h"
+#include "eval.h"
 #include "eventhandler.h"
 #include "security.h"
 #include "util.h"
@@ -77,16 +78,18 @@ void chessBoard::drawBoard() {
                         turn=!turn;
                         std::cout << "User: "<<std::endl;
                         printBitMap(board[1]);
+                        std::cout << "Evaluation" << int(evaluate(board));
+
                     }
                     else {
                         (this->board)[2] = 0;
                     }
-
                     }}
             board = verifyBoard(board);
+
                 }
                 else{
-                    board = carlsen(board);
+                    board = levy(board);
                     std::cout << "Computer: "<<std::endl;
                     printBitMap(board[0]);
                     turn=!turn;

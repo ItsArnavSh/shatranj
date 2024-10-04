@@ -1,5 +1,6 @@
 #include "engineHelper.h"
 #include "security.h"
+#include <cstdlib>
 using namespace std;
 std::vector<uint64_t> bitBreaker(uint64_t bitboard){
     std::vector<uint64_t> result;
@@ -46,7 +47,8 @@ std::vector<uint64_t*> allMoves(uint64_t* board,bool turn){
            //Now we need to play each move and add it to allMoves
            for(auto move:moves)
            {
-               allMoves.push_back(verifyBoard(playMove(move, newArr)));
+               uint64_t *preserve = copyArray(newArr, 17);
+               allMoves.push_back(playMove(move, preserve));
            }
        }
    }

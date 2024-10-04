@@ -9,5 +9,6 @@
 
 uint64_t* dunningKruger(uint64_t* board);
 uint64_t* carlsen(uint64_t* board);
+uint64_t* levy(uint64_t* board);
 
 #endif // ENGINE_H
