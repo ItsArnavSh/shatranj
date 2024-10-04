@@ -58,20 +58,19 @@ uint64_t handleClick(uint64_t click, uint64_t* board){
 return 0;
 }
 
-uint64_t* playMove(uint64_t click,uint64_t* board){
-    //First we need to find the older piece
-    printBitMap(board[1]&click);
-    if(board[16]&board[0]){
-        std::cout << "Affecting white";
-    board[0] = board[0]&(~board[16]) | click;
-    for(int i=3;i<9;i++)
-    {
-        if(board[16]&board[i])
-        {
-            board[i] = (board[i])&(~board[16]) | click;
-        }
-    }
+uint64_t* playMove(uint64_t click, uint64_t* board) {
+    // Check if it's black's turn (board[16] & board[0] indicates black's piece)
+    if (board[16] & board[0]) {
+        // Move black pieces (board[0] to board[8])
+        board[0] = (board[0] & ~board[16]) | click;
 
+        for (int i = 3; i < 9; ++i) {
+            if (board[16] & board[i]) {
+                board[i] = (board[i] & ~board[16]) | click;
+            }
+        }
+
+        // Clear positions of white pieces that overlap with the new black piece
         board[1] &= ~board[0];
         board[9] &= ~board[0];
         board[10] &= ~board[0];
@@ -79,26 +78,29 @@ uint64_t* playMove(uint64_t click,uint64_t* board){
         board[12] &= ~board[0];
         board[13] &= ~board[0];
         board[14] &= ~board[0];
-    board[16] = 0;
     }
-    else{
-        std::cout << "Affecting black";
-    board[1] = board[1]&(~board[16]) | click;
-    for(int i=9;i<15;i++)
-    {
-        if(board[16]&board[i])
-        {
-            board[i] = (board[i])&(~board[16]) | click;
+    else { // Else it's white's turn
+        // Move white pieces (board[1] to board[14])
+        board[1] = (board[1] & ~board[16]) | click;
+
+        for (int i = 9; i < 15; ++i) {
+            if (board[16] & board[i]) {
+                board[i] = (board[i] & ~board[16]) | click;
+            }
         }
+
+        // Clear positions of black pieces that overlap with the new white piece
+        board[0] &= ~board[1];
+        board[3] &= ~board[1];
+        board[4] &= ~board[1];
+        board[5] &= ~board[1];
+        board[6] &= ~board[1];
+        board[7] &= ~board[1];
+        board[8] &= ~board[1];
     }
-    board[0] &= ~board[1];
-    board[3] &= ~board[1];
-    board[4] &= ~board[1];
-    board[5] &= ~board[1];
-    board[6] &= ~board[1];
-    board[7] &= ~board[1];
-    board[8] &= ~board[1];
+
+    // Reset board[16] after the move
     board[16] = 0;
-    }
+
     return board;
 }

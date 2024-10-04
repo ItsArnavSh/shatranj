@@ -9,7 +9,7 @@ SFML_LIBS = -lsfml-graphics -lsfml-window -lsfml-system
 TARGET = main_program
 
 # Source files
-SRCS = board.cpp  engine.cpp  engineHelper.cpp  eval.cpp  eventhandler.cpp  evhelp.cpp  main.cpp  maingraphics.cpp  moves.cpp  moveshelper.cpp  util.cpp debugger.cpp
+SRCS = board.cpp  engine.cpp  engineHelper.cpp  eval.cpp  eventhandler.cpp  evhelp.cpp  main.cpp  maingraphics.cpp  moves.cpp  moveshelper.cpp  util.cpp debugger.cpp security.cpp
 
 # Object files (replace .cpp with .o)
 OBJS = $(SRCS:.cpp=.o)

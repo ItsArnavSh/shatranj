@@ -8,7 +8,6 @@ uint64_t rajaMoves(uint64_t click, uint64_t you) {
 
     // Shift the pattern based on the King's current position (click)
     uint8_t shift = bitBoardToInt(click);
-    std::cout << "King position index: " << (int)shift << std::endl;
 
     if (shift >= 0 && shift < 64) {
         king_pattern >>= 64-shift;
@@ -24,7 +23,6 @@ uint64_t rajaMoves(uint64_t click, uint64_t you) {
     king_moves = mask(king_moves, click);
 
     // Debugging output
-    std::cout << "King Moves: " << std::hex << king_moves << std::endl;
 
     return king_moves;
 }
@@ -35,7 +33,6 @@ uint64_t mantriMoves(uint64_t click, uint64_t you) {
 
     // Shift the pattern based on the Queen's current position (click)
     uint8_t shift = bitBoardToInt(click);
-    std::cout << "Queen position index: " << (int)shift << std::endl;
 
     if (shift >= 0 && shift < 64) {
         queen_pattern >>= 64-shift;
@@ -51,7 +48,6 @@ uint64_t mantriMoves(uint64_t click, uint64_t you) {
     queen_moves = mask(queen_moves, click);
 
     // Debugging output
-    std::cout << "Queen Moves: " << std::hex << queen_moves << std::endl;
 
     return queen_moves;
 }
@@ -61,7 +57,6 @@ uint64_t ashvaMoves(uint64_t click, uint64_t you) {
     __uint128_t knight_pattern = __uint128_t(0b10100001000100000000000100010000101)<<(64-35/2);
     // Shift the pattern based on the knight's current position (click)
     uint8_t shift = bitBoardToInt(click);  // Convert click to square index (0-63)
-    std::cout << "Knight position index: " << (int)shift << std::endl;
     if (shift >= 0 && shift < 64) {
         //62-43 = 19
         //57-33 = 24
@@ -77,10 +72,6 @@ uint64_t ashvaMoves(uint64_t click, uint64_t you) {
 
     // Apply mask to ensure valid knight moves
     knight_moves = mask(knight_moves, click);
-
-    // Debugging output
-    std::cout << "Knight Moves: " << std::hex << knight_moves << std::endl;
-
     return knight_moves;
 }
 
@@ -91,7 +82,6 @@ uint64_t gajaMoves(uint64_t click, uint64_t you) {
 
     // Shift the pattern based on the Bishop's current position (click)
     uint8_t shift = bitBoardToInt(click);
-    std::cout << "Bishop position index: " << (int)shift << std::endl;
 
     if (shift >= 0 && shift < 64) {
         bishop_pattern >>= 64-shift;
@@ -106,61 +96,45 @@ uint64_t gajaMoves(uint64_t click, uint64_t you) {
     // Apply mask to ensure valid Bishop moves
     bishop_moves = mask(bishop_moves, click);
 
-    // Debugging output
-    std::cout << "Bishop Moves: " << std::hex << bishop_moves << std::endl;
-
     return bishop_moves;
 }
-
 //Apart from Ratha and Padati all others can be simply masked!
-
 uint64_t rathaMoves(uint64_t click, uint64_t friendPieces, uint64_t enemyPieces) {
     uint64_t moves = findMoves(click, (int)1, (int)0, enemyPieces, friendPieces);  // Left
     moves |= findMoves(click, 0, 1, enemyPieces, friendPieces);          // Up
     moves |= findMoves(click, -1, 0, enemyPieces, friendPieces);         // Right
     moves |= findMoves(click, 0, -1, enemyPieces, friendPieces);         // Down
-    std::cout << moves<<"Moves"<<std::endl;
     return moves;
 }
-
-
 uint64_t padatiMoves(uint64_t click, uint64_t you, uint64_t enemy, bool turn) {
-    uint64_t moves = 0;
+    uint64_t pawn_moves = 0;
 
-    // Shifts for one and two steps forward
-    uint64_t one_step = turn ? (click << 8) : (click >> 8);
-    uint64_t two_steps = turn ? (click << 16) : (click >> 16);
+    if (!turn) { // Black pawns
+        // Black pawns move one square down (shift right by 8 bits)
+        uint64_t single_move = (click >> 8) & ~you & ~enemy; // Can't move to squares with your own or enemy pieces
 
-    // Start ranks for white and black pawns
-    uint64_t start_rank = turn ? 0x000000000000FF00 : 0x00FF000000000000;
+        // Black pawns attack diagonally to the left (shift right by 9 bits)
+        uint64_t attack_left = (click >> 9) & enemy & 0x7F7F7F7F7F7F7F7FULL; // Avoid overflow from the left edge
 
-    // Single move forward (one step)
-    if ((one_step & (you | enemy)) == 0) {
-        moves |= one_step;
+        // Black pawns attack diagonally to the right (shift right by 7 bits)
+        uint64_t attack_right = (click >> 7) & enemy & 0xFEFEFEFEFEFEFEFEULL; // Avoid overflow from the right edge
 
-        // Double move forward (two steps) from starting rank
-        if ((click & start_rank) != 0 && (two_steps & (you | enemy)) == 0) {
-            moves |= two_steps;
-        }
+        // Combine all possible moves
+        pawn_moves = single_move | attack_left | attack_right;
+    }
+    else { // White pawns
+        // White pawns move one square up (shift left by 8 bits)
+        uint64_t single_move = (click << 8) & ~you & ~enemy; // Can't move to squares with your own or enemy pieces
+
+        // White pawns attack diagonally to the left (shift left by 7 bits)
+        uint64_t attack_left = (click << 7) & enemy & 0x7F7F7F7F7F7F7F7FULL; // Avoid overflow from the left edge
+
+        // White pawns attack diagonally to the right (shift left by 9 bits)
+        uint64_t attack_right = (click << 9) & enemy & 0xFEFEFEFEFEFEFEFEULL; // Avoid overflow from the right edge
+
+        // Combine all possible moves
+        pawn_moves = single_move | attack_left | attack_right;
     }
 
-    // Capture moves
-    uint64_t left_capture, right_capture;
-
-    if (turn) {
-        left_capture = (click << 9) & 0xFEFEFEFEFEFEFEFE; // Shift left-up for white
-        right_capture = (click << 7) & 0x7F7F7F7F7F7F7F7F; // Shift right-up for white
-    } else {
-        left_capture = (click >> 7) & 0x7F7F7F7F7F7F7F7F; // Shift right-down for black
-        right_capture = (click >> 9) & 0xFEFEFEFEFEFEFEFE; // Shift left-down for black
-    }
-
-    // Apply captures only if enemy pieces are present
-    moves |= (left_capture & enemy);
-    moves |= (right_capture & enemy);
-
-    // Ensure moves do not include your own pieces
-    moves &= ~you;
-    std::cout << moves<<std::endl;
-    return moves;
+    return pawn_moves;
 }

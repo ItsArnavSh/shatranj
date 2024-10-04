@@ -1,6 +1,9 @@
 #include "maingraphics.h"
 #include "eventhandler.h"
+#include "security.h"
 #include "util.h"
+#include "engine.h"
+#include "debugger.h"
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Texture.hpp>
@@ -53,6 +56,7 @@ void chessBoard::drawBoard() {
                 window.close();
 
             // Handle mouse click event
+            if(!turn){
             if (event.type == sf::Event::MouseButtonPressed) {
                 if (event.mouseButton.button == sf::Mouse::Left) {
                     // Get mouse position relative to the window
@@ -61,6 +65,7 @@ void chessBoard::drawBoard() {
                     // Convert mouse position to board coordinates
                     uint8_t col = mousePos.x / SQUARE_SIZE;
                     uint8_t row = mousePos.y / SQUARE_SIZE;
+
                     if (validCLick({col, row}, this->board,turn)) {
                         (this->board)[2] = handleClick({col, row}, this->board);
 
@@ -70,13 +75,26 @@ void chessBoard::drawBoard() {
                         this->board = playMove(intToBitboard(col+row*8),board);
                         this->board[2]=0;
                         turn=!turn;
+                        std::cout << "User: "<<std::endl;
+                        printBitMap(board[1]);
                     }
                     else {
                         (this->board)[2] = 0;
                     }
+
+                    }}
+            board = verifyBoard(board);
+                }
+                else{
+                    board = carlsen(board);
+                    std::cout << "Computer: "<<std::endl;
+                    printBitMap(board[0]);
+                    turn=!turn;
+                    board[2] = 0;
+                    board = verifyBoard(board);
                 }
             }
-        }
+
 
         // Clear the window
         window.clear();

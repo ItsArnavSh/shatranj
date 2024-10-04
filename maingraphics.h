@@ -4,10 +4,9 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <string>
-
 #include "debugger.h"
 #include "board.h"
-
+#include "security.h"
 /// Chessboard dimensions
 const int BOARD_SIZE = 8;
 const int SQUARE_SIZE = 100;
