@@ -89,7 +89,7 @@ void chessBoard::drawBoard() {
 
                 }
                 else{
-                    board = levy(board);
+                    board = levy(board,true);
                     std::cout << "Computer: "<<std::endl;
                     printBitMap(board[0]);
                     turn=!turn;
