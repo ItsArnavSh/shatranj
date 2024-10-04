@@ -5,9 +5,10 @@
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <vector>
-
-
+#include "eventhandler.h"
+#include <iostream>
 // Constructor for chessBoard class
+bool turn = false;
 chessBoard::chessBoard(uint64_t* bitboard)
     : window(sf::VideoMode(BOARD_SIZE * SQUARE_SIZE, BOARD_SIZE * SQUARE_SIZE), "Chess Game")
 {
@@ -60,12 +61,15 @@ void chessBoard::drawBoard() {
                     // Convert mouse position to board coordinates
                     uint8_t col = mousePos.x / SQUARE_SIZE;
                     uint8_t row = mousePos.y / SQUARE_SIZE;
-                    if (validCLick({col, row}, this->board)) {
+                    if (validCLick({col, row}, this->board,turn)) {
                         (this->board)[2] = handleClick({col, row}, this->board);
+
                     (this->board)[16] = intToBitboard(col+row*8);}
                     else if(intToBitboard(col+row*8)&this->board[2]){
+
                         this->board = playMove(intToBitboard(col+row*8),board);
                         this->board[2]=0;
+                        turn=!turn;
                     }
                     else {
                         (this->board)[2] = 0;
@@ -82,14 +86,11 @@ void chessBoard::drawBoard() {
             for (int col = 0; col < BOARD_SIZE; ++col) {
                 sf::RectangleShape square(sf::Vector2f(SQUARE_SIZE, SQUARE_SIZE));
                 square.setPosition(col * SQUARE_SIZE, row * SQUARE_SIZE);
-
-                // Alternate colors for checkerboard pattern
                 if ((row + col) % 2 == 0) {
                     square.setFillColor(lightSquareColor);  // Light square
                 } else {
                     square.setFillColor(darkSquareColor);   // Dark square
                 }
-
                 // Draw each square
                 window.draw(square);
             }
