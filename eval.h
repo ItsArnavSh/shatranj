@@ -7,10 +7,10 @@
 //6 Cases to consider
 #include "util.h"
 
-int8_t evaluate(uint64_t* board);
-int8_t pieceAdvantage(uint64_t* board);
-int8_t piecePositioning(uint64_t* board);
-int8_t pieceCoordination(uint64_t* board);
-int8_t squaresUnderControl(uint64_t* board);
+float evaluate(uint64_t* board);
+float pieceAdvantage(uint64_t* board);
+float piecePositioning(uint64_t* board);
+float pieceCoordination(uint64_t* board);
+float squaresUnderControl(uint64_t* board);
 
 #endif
