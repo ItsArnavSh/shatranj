@@ -12,4 +12,6 @@ vector<uint64_t> bitBreaker(uint64_t bitboard);
 
 vector<uint64_t*> allMoves(uint64_t* board,bool turn);
 
+int8_t gameOver(uint64_t* board);
+
 #endif

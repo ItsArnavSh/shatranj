@@ -1,5 +1,4 @@
 #include "engineHelper.h"
-#include "security.h"
 #include <cstdlib>
 using namespace std;
 std::vector<uint64_t> bitBreaker(uint64_t bitboard){
@@ -53,4 +52,12 @@ std::vector<uint64_t*> allMoves(uint64_t* board,bool turn){
        }
    }
    return allMoves;
+}
+int8_t gameOver(uint64_t* board){
+    if(board[0]&board[9])
+        return 1;//Black One
+    else if(board[1]&board[3])
+        return -1;
+    else
+        return 0;
 }

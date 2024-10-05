@@ -1,24 +1,24 @@
 #include "eval.h"
+#include "engineHelper.h"
 #include "util.h"
+#include <limits>
 float evaluate(uint64_t* board){
+    if(gameOver(board))
+    {
+        return gameOver(board)*std::numeric_limits<float>::infinity();
+    }
     float A= pieceAdvantage(board);
     float B = piecePositioning(board);
-    return (2*A+B);
+    return (A+B);
 }
 
 float pieceAdvantage(uint64_t* board){
-    //Here are the piece value distributions to be used in the eval
-    //raja = 50
-    //ratha = 5
-    //mantri = 2
-    //ashva and gaja = 3
-    //padati = 1
     float tally=0;
-    tally-=100*(oneNumber(board[3])-oneNumber(board[9]));//king
+    tally-=50*(oneNumber(board[3])-oneNumber(board[9]));//king
     tally-= 2*(oneNumber(board[4])-oneNumber(board[10]));//mantri
-    tally-= 3*(oneNumber(board[6])-oneNumber(board[12]));//ashva
+    tally-= 5*(oneNumber(board[6])-oneNumber(board[12]));//ashva
     tally-= 3*(oneNumber(board[7])-oneNumber(board[13]));//gaja
-    tally-= 5*(oneNumber(board[5])-oneNumber(board[11]));//ratha
+    tally-= 10*(oneNumber(board[5])-oneNumber(board[11]));//ratha
     tally-= (oneNumber(board[8])-oneNumber(board[14]));//padati
     return tally;
 }
@@ -32,7 +32,7 @@ float piecePositioning(uint64_t *board) {
 
     // Reward for pieces in the center and middle, punish for being in the safe zone
     // King: board[3] (Black King), board[9] (White King)
-    positionScore -= 5 * (oneNumber(board[3] & safe) - oneNumber(board[9] & safe));  // Reward kings for staying in the safe zone
+    //positionScore -= 5 * (oneNumber(board[3] & safe) - oneNumber(board[9] & safe));  // Reward kings for staying in the safe zone
     //positionScore -= 5* (oneNumber(board[3] & ~safe) - oneNumber(board[9] & ~safe)); // Punish kings outside the safe zone
 
     // Other pieces:
@@ -53,7 +53,7 @@ float piecePositioning(uint64_t *board) {
     positionScore -= 5 * (oneNumber(board[5] & middle) - oneNumber(board[11] & middle)); // Ratha in middle
     //positionScore -= 2 * (oneNumber(board[5] & safe) - oneNumber(board[11] & safe));     // Punish ratha in safe zone
 
-    positionScore -= 10 * (oneNumber(board[8] & center) - oneNumber(board[14] & center)); // Padati in center
+    positionScore -= 20 * (oneNumber(board[8] & center) - oneNumber(board[14] & center)); // Padati in center
     positionScore -= 5 * (oneNumber(board[8] & middle) - oneNumber(board[14] & middle)); // Padati in middle
     //positionScore -= 4 * (oneNumber(board[8] & safe) - oneNumber(board[14] & safe));     // Punish padati in safe zone
 

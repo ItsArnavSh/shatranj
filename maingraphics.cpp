@@ -1,6 +1,7 @@
 #include "maingraphics.h"
 #include "eval.h"
 #include "eventhandler.h"
+#include "engineHelper.h"
 #include "security.h"
 #include "util.h"
 #include "engine.h"
@@ -53,7 +54,7 @@ void chessBoard::drawBoard() {
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed)
+            if (event.type == sf::Event::Closed || gameOver(board)==-1 || gameOver(board)==1)
                 window.close();
 
             // Handle mouse click event
@@ -90,13 +91,12 @@ void chessBoard::drawBoard() {
                 }
                 else{
                     board = levy(board,true);
-                    std::cout << "Computer: "<<std::endl;
-                    printBitMap(board[0]);
                     turn=!turn;
                     board[2] = 0;
                     board = verifyBoard(board);
                 }
             }
+
 
 
         // Clear the window
