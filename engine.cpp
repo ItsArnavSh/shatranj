@@ -1,6 +1,7 @@
 
 #include "engine.h"
 #include "engineHelper.h"
+#include "eval.h"
 
 float alphaBeta(uint64_t* position, uint8_t depth, bool maximizingPlayer, float alpha, float beta) {
     if (depth == 0) {

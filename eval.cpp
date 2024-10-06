@@ -9,7 +9,7 @@ float evaluate(uint64_t* board){
     }
     float A= pieceAdvantage(board);
     float B = piecePositioning(board);
-    return (2 * A +  10 * B);
+    return (A +B);
 }
 
 float pieceAdvantage(uint64_t* board){
