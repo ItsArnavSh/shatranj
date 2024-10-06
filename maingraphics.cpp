@@ -78,7 +78,7 @@ void chessBoard::drawBoard() {
                         this->board[2]=0;
                         turn=!turn;
                         std::cout << "User: "<<std::endl;
-                        printBitMap(board[1]);
+                        printBitMap(board[0]);
                         std::cout << "Evaluation" << int(evaluate(board));
 
                     }
@@ -89,7 +89,7 @@ void chessBoard::drawBoard() {
             board = verifyBoard(board);
 
                 }
-                else{
+            else{
                     board = levy(board,true);
                     turn=!turn;
                     board[2] = 0;

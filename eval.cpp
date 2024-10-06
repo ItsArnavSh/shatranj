@@ -9,15 +9,15 @@ float evaluate(uint64_t* board){
     }
     float A= pieceAdvantage(board);
     float B = piecePositioning(board);
-    return (A+B);
+    return (2 * A +  10 * B);
 }
 
 float pieceAdvantage(uint64_t* board){
     float tally=0;
-    tally-=50*(oneNumber(board[3])-oneNumber(board[9]));//king
-    tally-= 2*(oneNumber(board[4])-oneNumber(board[10]));//mantri
-    tally-= 5*(oneNumber(board[6])-oneNumber(board[12]));//ashva
-    tally-= 3*(oneNumber(board[7])-oneNumber(board[13]));//gaja
+    tally-=5*(oneNumber(board[3])-oneNumber(board[9]));//king
+    tally-= 5*(oneNumber(board[4])-oneNumber(board[10]));//mantri
+    tally-= 10*(oneNumber(board[6])-oneNumber(board[12]));//ashva
+    tally-= 5*(oneNumber(board[7])-oneNumber(board[13]));//gaja
     tally-= 10*(oneNumber(board[5])-oneNumber(board[11]));//ratha
     tally-= (oneNumber(board[8])-oneNumber(board[14]));//padati
     return tally;
