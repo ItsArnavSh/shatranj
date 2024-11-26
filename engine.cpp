@@ -47,7 +47,7 @@ uint64_t* levy(uint64_t* board, bool enginePlaysWhite) {
 
     // Evaluate each possible move using alpha-beta pruning
     for (uint8_t i = 0; i < allM.size(); ++i) {
-        // If engine is White, maximizingPlayer is true. If engine is Black, maximizingPlayer is false.
+        // If engine  is White, maximizingPlayer is true. If engine is Black, maximizingPlayer is false.
         bool maximizingPlayer = !enginePlaysWhite;
         float eval = alphaBeta(allM[i], 3, !maximizingPlayer, alpha, beta); // Opponent's turn initially
         if (eval > bestEval) {

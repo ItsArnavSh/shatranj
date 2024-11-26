@@ -15,7 +15,7 @@ uint64_t rajaMoves(uint64_t click, uint64_t you) {
         king_pattern = 0;  // Prevent overflow if the shift is invalid
     }
 
-    // Bound the moves to the board and remove invalid ones
+    // Bound the moves to the board and remove invalid onesx`
     uint64_t king_moves = boardBoundCheck(king_pattern);
     king_moves &= ~you;  // Remove friendly pieces (no attacking your own pieces)
 
@@ -32,6 +32,7 @@ uint64_t mantriMoves(uint64_t click, uint64_t you) {
     __uint128_t queen_pattern =  __uint128_t(0b1010000000000000101)<<(64-19/2); // Replace with the Queen's pattern
 
     // Shift the pattern based on the Queen's current position (click)
+
     uint8_t shift = bitBoardToInt(click);
 
     if (shift >= 0 && shift < 64) {

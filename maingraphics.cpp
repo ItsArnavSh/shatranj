@@ -9,10 +9,20 @@
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Texture.hpp>
+#include <SFML/Window/Event.hpp>
+#include <stack>
 #include <vector>
 #include "eventhandler.h"
 #include <iostream>
 // Constructor for chessBoard class
+std::vector<uint64_t> copyArrayToVector(uint64_t* src, size_t size) {
+    return std::vector<uint64_t>(src, src + size);
+}
+void assignVectorToBoard(const std::vector<uint64_t>& vec, uint64_t* dest, size_t size) {
+    for (size_t i = 0; i < size; ++i) {
+        dest[i] = vec[i];
+    }
+}
 bool turn = false;
 chessBoard::chessBoard(uint64_t* bitboard)
     : window(sf::VideoMode(BOARD_SIZE * SQUARE_SIZE, BOARD_SIZE * SQUARE_SIZE), "Chess Game")
@@ -45,6 +55,8 @@ bool chessBoard::loadTexture(const std::string &filename, sf::Texture &texture) 
 // Function to draw the chessboard
 // Function to draw the chessboard
 void chessBoard::drawBoard() {
+    stack<vector<uint64_t>> history;
+    history.push(copyArrayToVector(this->board, 17));
     // Colors for the board squares
     sf::Color lightSquareColor(240, 217, 181);  // Light squares (like beige)
     sf::Color darkSquareColor(181, 136, 99);    // Dark squares (like brown)
@@ -59,6 +71,13 @@ void chessBoard::drawBoard() {
 
             // Handle mouse click event
             if(!turn){
+                if (event.type == sf::Event::MouseButtonPressed) {
+                    if (event.mouseButton.button == sf::Mouse::Right) {
+                        if(!history.empty()){
+                        history.pop();
+                        assignVectorToBoard(history.top(), board,17);
+                        }
+                    }}
             if (event.type == sf::Event::MouseButtonPressed) {
                 if (event.mouseButton.button == sf::Mouse::Left) {
                     // Get mouse position relative to the window
@@ -77,6 +96,7 @@ void chessBoard::drawBoard() {
                         this->board = playMove(intToBitboard(col+row*8),board);
                         this->board[2]=0;
                         turn=!turn;
+                        history.push(copyArrayToVector(this->board, 17));
                         std::cout << "User: "<<std::endl;
                         printBitMap(board[0]);
                         std::cout << "Evaluation" << int(evaluate(board));
@@ -93,6 +113,7 @@ void chessBoard::drawBoard() {
                     board = levy(board,true);
                     turn=!turn;
                     board[2] = 0;
+                    history.push(copyArrayToVector(this->board, 17));
                     board = verifyBoard(board);
                 }
             }

@@ -26,14 +26,14 @@ float piecePositioning(uint64_t *board) {
     // Define the chessboard areas
     uint64_t center = 0b0000000000000000000000000001100000011000000000000000000000000000;
     uint64_t middle = 0b0000000000000000001111000010010000100100001111000000000000000000;
-    uint64_t safe = 0b1111111100000000000000000000000000000000000000000000000011111111;
+    uint64_t safe =   center;//0b1111111100000000000000000000000000000000000000000000000011111111;
 
     float positionScore = 0;
 
     // Reward for pieces in the center and middle, punish for being in the safe zone
     // King: board[3] (Black King), board[9] (White King)
-    //positionScore -= 5 * (oneNumber(board[3] & safe) - oneNumber(board[9] & safe));  // Reward kings for staying in the safe zone
-    //positionScore -= 5* (oneNumber(board[3] & ~safe) - oneNumber(board[9] & ~safe)); // Punish kings outside the safe zone
+    positionScore -= 5 * (oneNumber(board[3] & safe) - oneNumber(board[9] & safe));  // Reward kings for staying in the safe zone
+    positionScore -= 5* (oneNumber(board[3] & ~safe) - oneNumber(board[9] & ~safe)); // Punish kings outside the safe zone
 
     // Other pieces:
     // Reward for controlling the center and middle
