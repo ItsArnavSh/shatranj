@@ -27,7 +27,7 @@ public:
     void drawBoard();
 
     // Function to draw a chess piece
-    void drawPiece(coord coordinate, uint8_t index);
+    void drawPiece(coord coordinate, uint8_t index, sf::Vector2f origin, float square);
 
 private:
     // Function to load textures for chess pieces

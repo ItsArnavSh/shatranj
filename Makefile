@@ -1,6 +1,6 @@
 # Compiler and flags
-CXX = g++
-CXXFLAGS = -Wall -g -std=c++17
+CXX      = g++
+CXXFLAGS = -Wall -g -std=c++17 -Iinclude
 
 # SFML libraries
 SFML_LIBS = -lsfml-graphics -lsfml-window -lsfml-system
@@ -9,13 +9,15 @@ SFML_LIBS = -lsfml-graphics -lsfml-window -lsfml-system
 TARGET = main_program
 
 # Source files
-SRCS = board.cpp  engine.cpp  engineHelper.cpp  eval.cpp  eventhandler.cpp  evhelp.cpp  main.cpp  maingraphics.cpp  moves.cpp  moveshelper.cpp  util.cpp debugger.cpp security.cpp
+SRCS = $(wildcard src/*.cpp)
 
 # Object files (replace .cpp with .o)
 OBJS = $(SRCS:.cpp=.o)
 
 # Default target
-all: $(TARGET)
+all: build
+
+build: $(TARGET)
 
 # Link object files to create the executable
 $(TARGET): $(OBJS)
@@ -32,8 +34,11 @@ clean:
 # Run the program
 run: $(TARGET)
 	./$(TARGET)
+
 # check status
 status:
-	@echo Currently `ls *.h *.cpp 2>/dev/null | wc -l` files in the project;
-	@echo There are `cat *.h *.cpp 2>/dev/null | wc -l` lines completed;
-	@echo `expr 1000 - \`cat *.h *.cpp 2>/dev/null | wc -l\`` lines remaining to reach 1000;
+	@echo Currently `ls include/*.h src/*.cpp 2>/dev/null | wc -l` files in the project;
+	@echo There are `cat include/*.h src/*.cpp 2>/dev/null | wc -l` lines completed;
+	@echo `expr 1000 - \`cat include/*.h src/*.cpp 2>/dev/null | wc -l\`` lines remaining to reach 1000;
+
+.PHONY: all build clean run status
